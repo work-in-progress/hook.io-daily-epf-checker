@@ -87,30 +87,29 @@ DailyEpfImport.prototype._ensureSubTasksExists = (taskContainer,fullOrPartial,is
 # we first check for the full feed, if it does
 # not exists we start with that, then move on to the
 # intermediates.
-# This code is ugly as hell. Sorry for that.
+# This code is less ugly now.
 DailyEpfImport.prototype._epfStatusReceived = (data) ->
-
-  console.log "EPF Status received, validating...".cyan
+  console.log "Validating EPF Status...".cyan
   
-  pts.getOrCreateTaskContainer "epf::status-import::#{data.checkResult.full.date.asString}", (err,taskContainer,isNew) =>
-    if err
-      console.error err
-    else
-      @_ensureSubTasksExists taskContainer,data.checkResult.full,true, (err) =>
-        if err
-          console.error err
-        else
-          async.forEachSeries data.checkResult.incremental,
-            (inc,cb2) =>
-              pts.getOrCreateTaskContainer "epf::status-import::#{inc.date.asString}", (err,taskContainer2,isNew) =>
-                return cb2(err) if err? 
-                @_ensureSubTasksExists taskContainer2,inc,false, cb2
-              
-            ,(err) =>
-              if err
-                console.error err
-              else
-                @emit "daily-epf-import::ensure-tasks-finished", {}
-          
-      # make the above async, then handle all the other partials
+  items = []
+  items.push 
+    isFull : true
+    fullOrPartial: data.checkResult.full
+  
+  for inc in data.checkResult.incremental
+    items.push 
+      isFull : false
+      fullOrPartial: inc
         
+  async.forEachSeries items, 
+    (item,cb2) => 
+      pts.getOrCreateTaskContainer "epf::status-import::#{item.fullOrPartial.date.asString}", (err,taskContainer2,isNew) =>
+        return cb2(err) if err? 
+        @_ensureSubTasksExists taskContainer2,item.fullOrPartial,item.isFull, cb2
+    ,(err) =>
+      if err
+        console.error err
+        @emit "daily-epf-import::ensure-tasks-error", error : err
+      else
+        @emit "daily-epf-import::ensure-tasks-finished", {}
+
