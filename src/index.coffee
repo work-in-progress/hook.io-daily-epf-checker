@@ -59,6 +59,7 @@ DailyEpfImport.prototype._ensureSubTasksExists = (taskContainer,fullOrPartial,is
           month : fullOrPartial.date.month
           day : fullOrPartial.date.day
           year : fullOrPartial.date.year
+          activity : activity
 
   async.forEachSeries taskList, 
     (t,cb2) => 
@@ -94,7 +95,17 @@ DailyEpfImport.prototype._epfStatusReceived = (data) ->
         if err
           console.error err
         else
-          console.log "ensure task exists finished"
+          async.forEachSeries data.checkResult.incremental,
+            (inc,cb2) =>
+              pts.getOrCreateTaskContainer "epf::status-import::#{inc.date.asString}", (err,taskContainer2,isNew) =>
+                return cb2(err) if err? 
+                @_ensureSubTasksExists taskContainer2,inc,false, cb2
+              
+            ,(err) =>
+              if err
+                console.error err
+              else
+              console.log "ensure task exists finished"
           
       # make the above async, then handle all the other partials
         
