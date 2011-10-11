@@ -4,7 +4,7 @@ colors = require('colors')
 epf = require "itunes-epf-feedcheck"
 pts = require('persistent-task-status').client
 mongoose = require('mongoose')
-
+async = require 'async'
   
 DailyEpfImport = exports.DailyEpfImport = (options) ->
   self = @
@@ -40,23 +40,43 @@ DailyEpfImport.prototype._checkEpfStatus = (data) ->
     else
       @emit "epf-status-received", checkResult : data
 
-DailyEpfImport.prototype._ensureSubTasksExists = (taskContainer,fullOrPartial,cb) ->
-  tn = fullOrPartial.files[0]
-  taskName = "#{tn.fileName}::download"
-  taskContainer.getTask taskName, (err,task) =>
-    return cb(err) if err?
+# Huge Pain in the A.. function. This one
+# ensures that all tasks have been created for a particular
+# day. fullOrPartial is the feedcheck data.
+DailyEpfImport.prototype._ensureSubTasksExists = (taskContainer,fullOrPartial,isFull,cb) ->
 
-    if task
-      console.log "Task existed"
+  taskList = []
+  
+  for activity in ["download","unzip","untar","import","delete"]
+    for file in fullOrPartial.files
+      taskList.push 
+        taskName : "#{file.fileName}::#{activity}"
+        taskData : 
+          dateAsString : fullOrPartial.date.asString
+          isFull : isFull
+          fileUrl : file.fileUrl
+          fileName : file.fileName
+          month : fullOrPartial.date.month
+          day : fullOrPartial.date.day
+          year : fullOrPartial.date.year
+
+  async.forEachSeries taskList, 
+    (t,cb2) => 
+      taskContainer.getTask t.taskName, (err,task) =>
+        return cb2(err) if err?
+
+        if task
+          console.log "Task #{t.taskName} existed"
+          cb2(null)
+        else
+          taskContainer.addTask t.taskName,taskData : t.taskData, (err,task) =>
+            return cb2(err) if err?
+            console.log "Task #{t.taskName} added"
+            cb2(null)
+    ,(err) =>
+      return cb(err) if err?
       cb(null)
-    else
-      taskContainer.addTask taskName,taskData : {fileUrl : tn.fileUrl}, (err,task) =>
-        return cb(err) if err?
-        console.log "Task added"
-        cb(null)
-   
-    
-
+      
 # We have received a status back, now we need
 # to check if this is a new one. To do that
 # we first check for the full feed, if it does
@@ -70,7 +90,7 @@ DailyEpfImport.prototype._epfStatusReceived = (data) ->
     if err
       console.error err
     else
-      @_ensureSubTasksExists taskContainer,data.checkResult.full, (err) =>
+      @_ensureSubTasksExists taskContainer,data.checkResult.full,true, (err) =>
         if err
           console.error err
         else

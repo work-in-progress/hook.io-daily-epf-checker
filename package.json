@@ -28,6 +28,7 @@
     "hook.io-request" : ">= 0.4.0",
     "underscore": ">= 1.1.7",
     "mongoose": ">= 2.2.3",
+    "async": ">= 0.1.6",
     "colors" : ">= 0.5.0",
     "should" : ">=0.2.1",
     "vows" : ">= 0.5.9",
