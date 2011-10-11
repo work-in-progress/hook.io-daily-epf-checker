@@ -18,6 +18,9 @@ DailyEpfImport = exports.DailyEpfImport = (options) ->
       self._epfStatusReceived(data)
     self.on "check-epf-status", (data) ->
       self._checkEpfStatus()
+      
+    self.on "daily-epf-import::ensure-tasks-finished", (data) ->
+      console.log "ensure task exists finished"
     
     self.emit "check-epf-status", {}
         
@@ -37,6 +40,7 @@ DailyEpfImport.prototype._checkEpfStatus = (data) ->
   epf.check @.epfserver.auth.username, @.epfserver.auth.password, (err, data) =>
     if err
         console.error err
+        @emit "epf-status-error", error : err
     else
       @emit "epf-status-received", checkResult : data
 
@@ -83,6 +87,7 @@ DailyEpfImport.prototype._ensureSubTasksExists = (taskContainer,fullOrPartial,is
 # we first check for the full feed, if it does
 # not exists we start with that, then move on to the
 # intermediates.
+# This code is ugly as hell. Sorry for that.
 DailyEpfImport.prototype._epfStatusReceived = (data) ->
 
   console.log "EPF Status received, validating...".cyan
@@ -105,7 +110,7 @@ DailyEpfImport.prototype._epfStatusReceived = (data) ->
               if err
                 console.error err
               else
-              console.log "ensure task exists finished"
+                @emit "daily-epf-import::ensure-tasks-finished", {}
           
       # make the above async, then handle all the other partials
         
