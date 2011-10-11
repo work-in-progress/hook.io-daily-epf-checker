@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+var DailyEpfImport = require('../lib/index').DailyEpfImport;
+
+var hook = new DailyEpfImport({
+  name: 'daily-epf-import'
+});
+
+hook.start();

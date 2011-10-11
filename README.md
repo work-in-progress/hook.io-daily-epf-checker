@@ -1,67 +1,33 @@
-## About itunes-epf-check
+## About hook.io-daily-epf-import
 
-The Apple iTunes EPF program exports a daily dump of all the iTunes store content, exposed through their web site. The content is structured in folders that expose weekly changes, with one full dump and incremental updates there after.
-This module connects to the web site (you need to be member of the EPF program) and returns the list of files for the current week. It is intended to be called on a regular basis (every hour or so) to determine if new data is available for download.
+This composite hook queries the Apple iTunes EPF server for new data. If new data is available the data will be downloaded, then uncompressed, then untarred, then
+imported into a mongodb.
 
-[![Build Status](https://secure.travis-ci.org/freshfugu/itunes-epf-feedcheck.png)](http://travis-ci.org/freshfugu/itunes-epf-feedcheck)
+
+[![Build Status](https://secure.travis-ci.org/freshfugu/hook.io-daily-epf-import.png)](http://travis-ci.org/freshfugu/hook.io-daily-epf-import)
 
 Please note that travis-ci.org, at this point in time, does not test this correctly because the nock mocking library needs node 0.4.10 but travis runs on 0.4.8
 
+## Install
+
+	npm -g install hook.io-daily-epf-import
+
 ## Usage
 
-	./bin/itunes-epf-feedcheck -u username -p password
+	./bin/daily-epf-import 
 
-returns a json string. Or call it programmatically like so:
 
 ### Coffeescript
 
-	epf = require "itunes-epf-feedcheck"
-	epf.check "username", "password", (err, data) ->
-		if err
-			console.error err
-		else
-			console.log JSON.stringify(data)
     
 ### Javascript
 
-	var epf = require("itunes-epf-feedcheck");
-	epf.check("username", "password", function(err, data) {
-		if (err) {
-			return console.error(err);
-		} else {
-			return console.log(JSON.stringify(data));
-		}
-	});
-
-## Result data format
-You can see the sample JSON output in examples/sampleoutput.json. Here is a quick overview:
-
-	full:
-		files: [ {
-			"fileUrl": "http://username:password@feeds.itunes.apple.com/feeds/epf/v3/full/current/itunes20110928.tbz"
-			"fileName": "itunes20110928.tbz"},...
-		]
-		"date": {
-			"asString": "20110928",
-			"month": 9,
-			"day": 28,
-			"year": 2011
-		}
-	incremental [	{
-		"folderUrl": "http://username:password@feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/20110930/",
-		"date": {
-			"asString": "20110930",
-			"month": 9,
-			"day": 30,
-			"year": 2011
-		},
-		"files" : *see above*
-	},...
-	]
 
 ## Advertising :)
 
 Check out http://freshfugu.com and http://scottyapp.com
+
+Follow us on Twitter at @getscottyapp and @freshfugu and like us on Facebook please. Every mention is welcome and we follow back.
 
 ## Trivia
 
@@ -79,7 +45,7 @@ Listened to lots of Nicki Minaj while writing this.
 * npm adduser
 * npm publish
 
-## Contributing to itunes-epf-feedback
+## Contributing to hook.io-daily-epf-import
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it

@@ -2,17 +2,17 @@
   "name": "hook.io-daily-epf-import",
   "description" : "A hook that performs the daily import from the Apple iTunes EPF server.",
   "subdomain": "hook.io-daily-epf-import",
-  "private" : false,
   "homepage": "http://freshfugu.com",
   "author": "Martin Wawrusch (http://twitter.com/martin_sunset)",
   "directories": {
-    "lib": "./lib"
+    "lib": "./lib",
+    "test": "./spec"
   },
   "bin" : {
     "daily-epf-import" : "./bin/daily-epf-import"
   },
   "scripts": {
-    "start": "lib/index.js",
+    "start": "bin/daily-epf-import",
     "test": "vows --spec spec/*-spec.coffee",
     "watch" : "coffee -c -w  -o lib src"
   },
