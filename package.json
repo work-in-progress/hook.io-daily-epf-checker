@@ -1,0 +1,41 @@
+{
+  "name": "hook.io-daily-epf-import",
+  "description" : "A hook that performs the daily import from the Apple iTunes EPF server.",
+  "subdomain": "hook.io-daily-epf-import",
+  "private" : false,
+  "homepage": "http://freshfugu.com",
+  "author": "Martin Wawrusch (http://twitter.com/martin_sunset)",
+  "directories": {
+    "lib": "./lib"
+  },
+  "bin" : {
+    "daily-epf-import" : "./bin/daily-epf-import"
+  },
+  "scripts": {
+    "start": "lib/index.js",
+    "test": "vows --spec spec/*-spec.coffee",
+    "watch" : "coffee -c -w  -o lib src"
+  },
+  "engines": {
+      "node": ">= 0.4.08"
+    },
+  "dependencies": {
+    "hook.io" : ">= 0.7.7",
+    "tar-async" : ">= 1.1.1",
+    "http-get" : ">= 0.3.8",
+    "hook.io-cron" : ">= 0.4.0",
+    "hook.io-feed" : ">= 0.4.0",
+    "hook.io-request" : ">= 0.4.0",
+    "underscore": ">= 1.1.7",
+    "mongoose": ">= 2.2.3",
+    "colors" : ">= 0.5.0",
+    "should" : ">=0.2.1",
+    "vows" : ">= 0.5.9",
+    "nconf" : ">= 0.4.3",
+    "itunes-epf-feedcheck" : ">= 0.0.1",
+    "persistent-task-status" : ">= 0.0.1"
+    
+  },
+  "version": "0.0.1"
+
+}
