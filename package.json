@@ -11,6 +11,10 @@
   "bin" : {
     "daily-epf-import" : "./bin/daily-epf-import"
   },
+  "keywords" : [
+    "epf","hook.io","apple","itunes"
+  ],
+  
   "scripts": {
     "start": "bin/daily-epf-import",
     "test": "vows --spec spec/*-spec.coffee",
@@ -22,10 +26,7 @@
   "dependencies": {
     "hook.io" : ">= 0.7.7",
     "tar-async" : ">= 1.1.1",
-    "http-get" : ">= 0.3.8",
     "hook.io-cron" : ">= 0.4.0",
-    "hook.io-feed" : ">= 0.4.0",
-    "hook.io-request" : ">= 0.4.0",
     "underscore": ">= 1.1.7",
     "mongoose": ">= 2.2.3",
     "async": ">= 0.1.6",
@@ -34,7 +35,8 @@
     "vows" : ">= 0.5.9",
     "nconf" : ">= 0.4.3",
     "itunes-epf-feedcheck" : ">= 0.0.1",
-    "persistent-task-status" : ">= 0.0.1"
+    "persistent-task-status" : ">= 0.0.1",
+    "hook.io-wget": ">= 0.0.4"
     
   },
   "version": "0.0.1"

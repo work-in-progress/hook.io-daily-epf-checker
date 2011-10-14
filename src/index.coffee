@@ -13,25 +13,16 @@ DailyEpfImport = exports.DailyEpfImport = (options) ->
   self.on "hook::ready", ->  
     mongoose.connect self.mongoose.connection
   
-    self.on "epf-status-received", (data)->
+    self.on "daily-epf-import::epf-status-received", (data)->
       #console.log JSON.stringify(data.checkResult)
       self._epfStatusReceived(data)
-    self.on "check-epf-status", (data) ->
+    self.on "daily-epf-import::check-epf-status", (data) ->
       self._checkEpfStatus()
       
     self.on "daily-epf-import::ensure-tasks-finished", (data) ->
       console.log "ensure task exists finished"
     
-    self.emit "check-epf-status", {}
-        
-    #for key of self.feeds
-    #  ((feed) ->
-    #    reader = new FeedSub(feed.url, feed)
-    #    reader.on "item", (item) ->
-    #      self.emit feed.name + "::item", item
-    #
-    #    reader.start()
-    #  ) self.feeds[key]
+    self.emit "daily-epf-import::check-epf-status", {}
 
 util.inherits DailyEpfImport, Hook
 
@@ -40,9 +31,9 @@ DailyEpfImport.prototype._checkEpfStatus = (data) ->
   epf.check @.epfserver.auth.username, @.epfserver.auth.password, (err, data) =>
     if err
         console.error err
-        @emit "epf-status-error", error : err
+        @emit "daily-epf-import::epf-status-error", error : err
     else
-      @emit "epf-status-received", checkResult : data
+      @emit "daily-epf-import::epf-status-received", checkResult : data
 
 # Huge Pain in the A.. function. This one
 # ensures that all tasks have been created for a particular
