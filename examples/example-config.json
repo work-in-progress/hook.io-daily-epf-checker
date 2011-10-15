@@ -1,0 +1,12 @@
+{
+  "epfserver" : {
+    "auth" : {
+      "username" : "XXX",
+      "password" : "YYY"
+    }
+  },
+  
+  "mongoose" : {
+    "connection" : "mongodb://localhost/pts_test"
+  }
+}

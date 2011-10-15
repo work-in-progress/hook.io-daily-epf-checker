@@ -1,7 +1,8 @@
 {
-  "name": "hook.io-daily-epf-import",
-  "description" : "A hook that performs the daily import from the Apple iTunes EPF server.",
-  "subdomain": "hook.io-daily-epf-import",
+  "version": "0.0.1",
+  "name": "hook.io-daily-epf-checker",
+  "description" : "A hook that checks the Apple iTunes EPF server for new files, and if they exist creates a new task cascade to be processed.",
+  "subdomain": "hook.io-daily-epf-checker",
   "homepage": "http://freshfugu.com",
   "author": "Martin Wawrusch (http://twitter.com/martin_sunset)",
   "directories": {
@@ -9,36 +10,45 @@
     "test": "./spec"
   },
   "bin" : {
-    "daily-epf-import" : "./bin/daily-epf-import"
+    "daily-epf-checker" : "./bin/daily-epf-checker"
   },
   "keywords" : [
     "epf","hook.io","apple","itunes"
   ],
   
   "scripts": {
-    "start": "bin/daily-epf-import",
+    "start": "bin/daily-epf-checker",
     "test": "vows --spec spec/*-spec.coffee",
     "watch" : "coffee -c -w  -o lib src"
   },
   "engines": {
-      "node": ">= 0.4.08"
+      "node": ">= 0.4.8"
     },
   "dependencies": {
     "hook.io" : ">= 0.7.7",
-    "tar-async" : ">= 1.1.1",
-    "hook.io-cron" : ">= 0.4.0",
     "underscore": ">= 1.1.7",
     "mongoose": ">= 2.2.3",
-    "async": ">= 0.1.6",
+    "async" : "0.1.x",
     "colors" : ">= 0.5.0",
-    "should" : ">=0.2.1",
-    "vows" : ">= 0.5.9",
     "nconf" : ">= 0.4.3",
-    "itunes-epf-feedcheck" : ">= 0.0.1",
-    "persistent-task-status" : ">= 0.0.1",
-    "hook.io-wget": ">= 0.0.4"
+    "pkginfo" : "~ 0.2", 
+    "itunes-epf-feedcheck" : "~ 0.0.1",
+    "persistent-task-status" : "~ 0.0.1",
+    "hook.io-wget": "~ 0.0.4",
+    "hook.io-cron" : ">= 0.4.0"
     
   },
-  "version": "0.0.1"
+  "devDependencies": {
+    "should" : ">=0.2.1",    
+    "vows" : ">= 0.5.9",
+    "hook.io-mock": "~ 0.0.2"
+  },
+  "bugs": { "url": "http://github.com/freshfugu/hook.io-daily-epf-checker/issues" },
+  "licenses": [
+    { "type": "MIT",
+      "url": "http://github.com/freshfugu/hook.io-daily-epf-checker/raw/master/LICENSE"
+    }
+  ]
+  
 
 }

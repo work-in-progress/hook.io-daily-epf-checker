@@ -3,7 +3,7 @@
 var DailyEpfImport = require('../lib/index').DailyEpfImport;
 
 var hook = new DailyEpfImport({
-  name: 'daily-epf-import'
+  name: 'daily-epf-checker'
 });
 
 hook.start();

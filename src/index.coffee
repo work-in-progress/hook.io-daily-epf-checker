@@ -13,16 +13,16 @@ DailyEpfImport = exports.DailyEpfImport = (options) ->
   self.on "hook::ready", ->  
     mongoose.connect self.mongoose.connection
   
-    self.on "daily-epf-import::epf-status-received", (data)->
+    self.on "daily-epf-checker::epf-status-received", (data)->
       #console.log JSON.stringify(data.checkResult)
       self._epfStatusReceived(data)
-    self.on "daily-epf-import::check-epf-status", (data) ->
+    self.on "daily-epf-checker::check-epf-status", (data) ->
       self._checkEpfStatus()
       
-    self.on "daily-epf-import::ensure-tasks-finished", (data) ->
+    self.on "daily-epf-checker::ensure-tasks-finished", (data) ->
       console.log "ensure task exists finished"
     
-    self.emit "daily-epf-import::check-epf-status", {}
+    self.emit "daily-epf-checker::check-epf-status", {}
 
 util.inherits DailyEpfImport, Hook
 
@@ -31,9 +31,9 @@ DailyEpfImport.prototype._checkEpfStatus = (data) ->
   epf.check @.epfserver.auth.username, @.epfserver.auth.password, (err, data) =>
     if err
         console.error err
-        @emit "daily-epf-import::epf-status-error", error : err
+        @emit "daily-epf-checker::epf-status-error", error : err
     else
-      @emit "daily-epf-import::epf-status-received", checkResult : data
+      @emit "daily-epf-checker::epf-status-received", checkResult : data
 
 # Huge Pain in the A.. function. This one
 # ensures that all tasks have been created for a particular
@@ -100,7 +100,7 @@ DailyEpfImport.prototype._epfStatusReceived = (data) ->
     ,(err) =>
       if err
         console.error err
-        @emit "daily-epf-import::ensure-tasks-error", error : err
+        @emit "daily-epf-checker::ensure-tasks-error", error : err
       else
-        @emit "daily-epf-import::ensure-tasks-finished", {}
+        @emit "daily-epf-checker::ensure-tasks-finished", {}
 

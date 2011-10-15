@@ -1,20 +1,19 @@
-## About hook.io-daily-epf-import
+## About hook.io-daily-epf-checker
 
-This composite hook queries the Apple iTunes EPF server for new data. If new data is available the data will be downloaded, then uncompressed, then untarred, then
-imported into a mongodb.
+A hook that checks the Apple iTunes EPF server for new files, and if they exist creates a new task cascade to be processed.
 
 
-[![Build Status](https://secure.travis-ci.org/freshfugu/hook.io-daily-epf-import.png)](http://travis-ci.org/freshfugu/hook.io-daily-epf-import)
+[![Build Status](https://secure.travis-ci.org/freshfugu/hook.io-daily-epf-checker.png)](http://travis-ci.org/freshfugu/hook.io-daily-epf-checker)
 
-Please note that travis-ci.org, at this point in time, does not test this correctly because the nock mocking library needs node 0.4.10 but travis runs on 0.4.8
+Please note that travis-ci.org, at this point in time, does not test hook.io apps correctly
 
 ## Install
 
-	npm -g install hook.io-daily-epf-import
+	npm -g install hook.io-daily-epf-checker
 
 ## Usage
 
-	./bin/daily-epf-import 
+	./bin/daily-epf-checker 
 
 
 ### Coffeescript
@@ -45,7 +44,7 @@ Listened to lots of Nicki Minaj while writing this.
 * npm adduser
 * npm publish
 
-## Contributing to hook.io-daily-epf-import
+## Contributing to hook.io-daily-epf-checker
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
