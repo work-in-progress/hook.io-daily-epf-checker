@@ -33,10 +33,7 @@
     "nconf" : ">= 0.4.3",
     "pkginfo" : "~ 0.2", 
     "itunes-epf-feedcheck" : "~ 0.0.1",
-    "persistent-task-status" : "~ 0.0.1",
-    "hook.io-wget": "~ 0.0.4",
-    "hook.io-cron" : ">= 0.4.0"
-    
+    "persistent-task-status" : "~ 0.0.1"    
   },
   "devDependencies": {
     "should" : ">=0.2.1",    

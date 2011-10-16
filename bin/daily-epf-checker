@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-var DailyEpfImport = require('../lib/index').DailyEpfImport;
+var DailyEpfCheck = require('../lib/index').DailyEpfCheck;
 
-var hook = new DailyEpfImport({
-  name: 'daily-epf-checker'
+var hook = new DailyEpfCheck({
+  name: 'daily-epf-checker',
+	"hook-port": 5100
 });
 
 hook.start();

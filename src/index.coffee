@@ -5,11 +5,11 @@ epf = require "itunes-epf-feedcheck"
 pts = require('persistent-task-status').client
 mongoose = require('mongoose')
 async = require 'async'
-  
-DailyEpfImport = exports.DailyEpfImport = (options) ->
+
+
+DailyEpfCheck = exports.DailyEpfCheck = (options) ->
   self = @
   Hook.call self, options
-  
   self.on "hook::ready", ->  
     mongoose.connect self.mongoose.connection
   
@@ -23,10 +23,12 @@ DailyEpfImport = exports.DailyEpfImport = (options) ->
       console.log "ensure task exists finished"
     
     self.emit "daily-epf-checker::check-epf-status", {}
+    setInterval (() => self.emit "daily-epf-checker::check-epf-status", {})
+      , 1000 * 60 * 10
+      
+util.inherits DailyEpfCheck, Hook
 
-util.inherits DailyEpfImport, Hook
-
-DailyEpfImport.prototype._checkEpfStatus = (data) ->
+DailyEpfCheck.prototype._checkEpfStatus = (data) ->
   console.log "Checking EPF status".cyan
   epf.check @.epfserver.auth.username, @.epfserver.auth.password, (err, data) =>
     if err
@@ -38,7 +40,7 @@ DailyEpfImport.prototype._checkEpfStatus = (data) ->
 # Huge Pain in the A.. function. This one
 # ensures that all tasks have been created for a particular
 # day. fullOrPartial is the feedcheck data.
-DailyEpfImport.prototype._ensureSubTasksExists = (taskContainer,fullOrPartial,isFull,cb) ->
+DailyEpfCheck.prototype._ensureSubTasksExists = (taskContainer,fullOrPartial,isFull,cb) ->
 
   taskList = []
   
@@ -79,7 +81,7 @@ DailyEpfImport.prototype._ensureSubTasksExists = (taskContainer,fullOrPartial,is
 # not exists we start with that, then move on to the
 # intermediates.
 # This code is less ugly now.
-DailyEpfImport.prototype._epfStatusReceived = (data) ->
+DailyEpfCheck.prototype._epfStatusReceived = (data) ->
   console.log "Validating EPF Status...".cyan
   
   items = []
